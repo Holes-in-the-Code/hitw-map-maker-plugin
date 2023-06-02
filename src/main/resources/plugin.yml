@@ -1,0 +1,6 @@
+main: com.hitc.hitwmapmakerplugin.main.Main
+name: HitW-Map-Maker
+version: 1.0
+api-version: 1.13
+author: Holes in the Code
+description: Hole in the Wall map maker plugin
