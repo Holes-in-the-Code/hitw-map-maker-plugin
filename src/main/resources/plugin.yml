@@ -4,3 +4,7 @@ version: 1.0
 api-version: 1.13
 author: Holes in the Code
 description: Hole in the Wall map maker plugin
+commands:
+  scan:
+    description: used to scan a region
+    usage: /scan
