@@ -16,7 +16,7 @@ class Main: JavaPlugin(), Listener {
     override fun onEnable() {
         server.pluginManager.registerEvents(this, this)
         registerCommands()
-        Files.createDirectories(Path("./plugin/HitW"))
+        Files.createDirectories(Path("./plugins/HitW"))
     }
 
     @EventHandler
