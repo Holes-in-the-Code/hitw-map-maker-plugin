@@ -28,14 +28,17 @@ class Scan : CommandExecutor {
         args: Array<out String>?
     ): Boolean {
         val p = sender as? Player ?: return true
-
-        val selection = MainObject.worldEditPlugin.getSelection(p) ?: return true
+        val name = args?.get(0) ?:
+            run{p.sendMessage("§cInvalid name given."); return true}
+        val selection = MainObject.worldEditPlugin.getSelection(p) ?:
+            run{p.sendMessage("§cNothing selected."); return true}
         val region = selection.regionSelector.region
-        p.sendMessage("scanning...")
-        region.forEach{ scan(it, p, wall) }
-        p.sendMessage("scan completed")
 
-        MapFileUtils.save(wall)
+        p.sendMessage("§aScanning...")
+        region.forEach{ scan(it, p, wall) }
+        p.sendMessage("§aScan completed")
+
+        MapFileUtils.save(wall, name)
 
         return true
     }
@@ -43,8 +46,9 @@ class Scan : CommandExecutor {
     private fun scan(blockPos : BlockVector, p : Player, wall : Map) {
         val location = Location(p.world, blockPos.x, blockPos.y, blockPos.z)
         val block = p.world.getBlockAt(location)
-        location.subtract(p.blockPosition)
         val blockData = block.state.data
+
+        location.subtract(p.blockPosition)
 
         when (block.type) {
             Material.WOOL,Material.STAINED_GLASS,Material.STAINED_CLAY -> {

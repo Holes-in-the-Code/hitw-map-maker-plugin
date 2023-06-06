@@ -9,9 +9,9 @@ import java.lang.Exception
 
 
 object MapFileUtils {
-    fun save(map: Map) {
+    fun save(map: Map, name : String) {
         val jsonElement = Json.encodeToJsonElement(map)
-        val f = File("./plugins/HitW/test.json")
+        val f = File("./plugins/HitW/$name.json")
         try {
             f.writeText(jsonElement.toString())
         }
@@ -20,8 +20,8 @@ object MapFileUtils {
         }
     }
 
-    fun load(): Map {
-        val f = File("./plugins/HitW/test.json")
+    fun load(name : String): Map {
+        val f = File("./plugins/HitW/$name.json")
         return Json.decodeFromString<Map>(f.readText())
     }
 

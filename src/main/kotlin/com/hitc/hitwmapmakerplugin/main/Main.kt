@@ -8,14 +8,15 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.plugin.java.JavaPlugin
+import java.nio.file.Files
+import kotlin.io.path.Path
 
 class Main: JavaPlugin(), Listener {
 
     override fun onEnable() {
         server.pluginManager.registerEvents(this, this)
         registerCommands()
-
-
+        Files.createDirectories(Path("./plugin/HitW"))
     }
 
     @EventHandler
@@ -28,8 +29,9 @@ class Main: JavaPlugin(), Listener {
 
     }
 }
+
 object MainObject {
     private val worldEdit = Bukkit.getServer().pluginManager.getPlugin("WorldEdit");
-    val worldEditPlugin : WorldEditPlugin = worldEdit as? WorldEditPlugin ?: throw Exception("worldedit not installed")
+    val worldEditPlugin = worldEdit as? WorldEditPlugin ?: throw Exception("worldedit not installed")
 }
 

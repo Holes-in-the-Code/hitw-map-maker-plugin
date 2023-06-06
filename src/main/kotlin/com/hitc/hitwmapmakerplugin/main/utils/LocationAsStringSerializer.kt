@@ -13,10 +13,10 @@ import org.bukkit.Bukkit
 import org.bukkit.Location
 
 object LocationAsStringSerializer : KSerializer<Location> {
-    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("Location", PrimitiveKind.STRING)
+    override val descriptor = PrimitiveSerialDescriptor("Location", PrimitiveKind.STRING)
 
     override fun serialize(encoder: Encoder, value: Location) {
-        val serialLocation = SerialLocation(
+        val serialLocation = SerialLocation (
             value.world.name,
             value.x,
             value.y,
@@ -32,7 +32,7 @@ object LocationAsStringSerializer : KSerializer<Location> {
         val string = decoder.decodeString()
         val serialLocation = Json.decodeFromString<SerialLocation>(string)
         val world = Bukkit.getWorld(serialLocation.world) ?: throw IllegalArgumentException("unknown world")
-        return Location(
+        return Location (
             world,
             serialLocation.x,
             serialLocation.y,
