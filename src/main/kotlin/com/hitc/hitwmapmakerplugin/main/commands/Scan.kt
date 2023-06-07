@@ -6,6 +6,7 @@ import com.hitc.hitwmapmakerplugin.main.core.WallBlockType
 import com.hitc.hitwmapmakerplugin.main.utils.MapFileUtils
 import com.hitc.hitwmapmakerplugin.main.utils.MiscUtils
 import com.hitc.hitwmapmakerplugin.main.utils.blockPosition
+import com.hitc.hitwmapmakerplugin.main.utils.facingDirection
 import com.sk89q.worldedit.BlockVector
 import org.bukkit.DyeColor
 import org.bukkit.Location
@@ -82,7 +83,7 @@ class Scan : CommandExecutor {
             }
             Material.LEVER -> {
                 wall.blocks[location] = WallBlockType.LEVER
-                wall.facings[location] = MiscUtils.getLeverFacing(blockData.data)
+                wall.facings[location] = (blockData as Lever).facingDirection
             }
             Material.COBBLE_WALL -> {
                 wall.blocks[location] = WallBlockType.SUPPORT
