@@ -11,5 +11,6 @@ enum class WallBlockType {
     WOOD1,
     WOOD2,
     WOOD_STAIR,
-    GLASS
+    GLASS,
+    CARPET
 }

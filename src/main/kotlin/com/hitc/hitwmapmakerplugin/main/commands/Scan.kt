@@ -91,6 +91,10 @@ class Scan : CommandExecutor {
             Material.COBBLE_WALL -> {
                 wall.blocks[location] = WallBlockType.SUPPORT
             }
+            Material.CARPET -> {
+                wall.blocks[location] = WallBlockType.CARPET
+            }
+
 
             else -> return
         }

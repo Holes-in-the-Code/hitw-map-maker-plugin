@@ -11,3 +11,4 @@ data class SerialLocation(
     val yaw : Float,
     val pitch : Float
 )
+
