@@ -2,7 +2,6 @@ package com.hitc.hitwmapmakerplugin.main
 
 import com.hitc.hitwmapmakerplugin.main.commands.Scan
 import com.sk89q.worldedit.bukkit.WorldEditPlugin
-import com.sk89q.worldedit.bukkit.adapter.BukkitImplLoader
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
