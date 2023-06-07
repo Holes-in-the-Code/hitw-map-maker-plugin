@@ -6,15 +6,15 @@ import com.hitc.hitwmapmakerplugin.main.core.WallBlockType
 import com.hitc.hitwmapmakerplugin.main.utils.MapFileUtils
 import com.hitc.hitwmapmakerplugin.main.utils.blockPosition
 import com.sk89q.worldedit.BlockVector
-import com.sk89q.worldedit.blocks.ClothColor
+import org.bukkit.DyeColor
 import org.bukkit.Location
 import org.bukkit.Material
+import org.bukkit.TreeSpecies
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
-import org.bukkit.material.Lever
-import org.bukkit.material.Stairs
+import org.bukkit.material.*
 
 class Scan : CommandExecutor {
 
@@ -28,7 +28,7 @@ class Scan : CommandExecutor {
         args: Array<out String>?
     ): Boolean {
         val p = sender as? Player ?: return true
-        val name = args?.get(0) ?:
+        val name = if (args?.isNotEmpty() == true) args[0] else
             run{p.sendMessage("§cInvalid name given."); return true}
         val selection = MainObject.worldEditPlugin.getSelection(p) ?:
             run{p.sendMessage("§cNothing selected."); return true}
@@ -52,14 +52,17 @@ class Scan : CommandExecutor {
 
         when (block.type) {
             Material.WOOL,Material.STAINED_GLASS,Material.STAINED_CLAY -> {
-                when (ClothColor.fromID(block.data.toInt())) {
-                    ClothColor.DARK_GREEN -> {
+                var color : DyeColor? = null
+                (blockData as? Colorable)?.color?.let{ color = it }
+
+                when (color) {
+                    DyeColor.GREEN -> {
                         if (block.type == Material.WOOL) wall.blocks[location] = WallBlockType.WALL
                         if (block.type == Material.STAINED_GLASS) wall.blocks[location] = WallBlockType.GLASS
                     }
-                    ClothColor.YELLOW -> wall.blocks[location] = WallBlockType.WALL2
-                    ClothColor.RED -> wall.blocks[location] = WallBlockType.WALL_UNUSED
-                    ClothColor.BLACK -> {
+                    DyeColor.YELLOW -> wall.blocks[location] = WallBlockType.WALL2
+                    DyeColor.RED -> wall.blocks[location] = WallBlockType.WALL_UNUSED
+                    DyeColor.BLACK -> {
                         if (block.type == Material.WOOL) wall.blocks[location] = WallBlockType.SUPPORT_START
                         if (block.type == Material.STAINED_CLAY) wall.blocks[location] = WallBlockType.SUPPORT_END
 
@@ -69,11 +72,11 @@ class Scan : CommandExecutor {
             }
             Material.WOOD -> {
                 // oak
-                if (block.data.toInt() == 0) {
+                if ((blockData as? Tree)?.species == TreeSpecies.GENERIC) {
                     wall.blocks[location] = WallBlockType.WOOD1
                 }
                 // spruce
-                else if (block.data.toInt() == 1) {
+                else if ((blockData as? Tree)?.species == TreeSpecies.REDWOOD) {
                     wall.blocks[location] = WallBlockType.WOOD2
                 }
             }
