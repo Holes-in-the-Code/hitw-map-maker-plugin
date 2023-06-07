@@ -51,21 +51,19 @@ class Scan : CommandExecutor {
         location.subtract(p.blockPosition)
 
         when (block.type) {
-            Material.WOOL,Material.STAINED_GLASS,Material.STAINED_CLAY -> {
+            Material.WOOL,Material.STAINED_CLAY -> {
                 var color : DyeColor? = null
                 (blockData as? Colorable)?.color?.let{ color = it }
 
                 when (color) {
                     DyeColor.GREEN -> {
                         if (block.type == Material.WOOL) wall.blocks[location] = WallBlockType.WALL
-                        if (block.type == Material.STAINED_GLASS) wall.blocks[location] = WallBlockType.GLASS
                     }
-                    DyeColor.YELLOW -> wall.blocks[location] = WallBlockType.WALL2
-                    DyeColor.RED -> wall.blocks[location] = WallBlockType.WALL_UNUSED
+                    DyeColor.YELLOW -> if (block.type == Material.WOOL) wall.blocks[location] = WallBlockType.WALL2
+                    DyeColor.RED -> if (block.type == Material.WOOL) wall.blocks[location] = WallBlockType.WALL_UNUSED
                     DyeColor.BLACK -> {
                         if (block.type == Material.WOOL) wall.blocks[location] = WallBlockType.SUPPORT_START
                         if (block.type == Material.STAINED_CLAY) wall.blocks[location] = WallBlockType.SUPPORT_END
-
                     }
                     else -> return
                 }
@@ -94,7 +92,9 @@ class Scan : CommandExecutor {
             Material.CARPET -> {
                 wall.blocks[location] = WallBlockType.CARPET
             }
-
+            Material.STAINED_GLASS -> {
+                wall.blocks[location] = WallBlockType.GLASS
+            }
 
             else -> return
         }
