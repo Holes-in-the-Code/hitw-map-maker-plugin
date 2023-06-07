@@ -4,17 +4,20 @@ import com.hitc.hitwmapmakerplugin.main.MainObject
 import com.hitc.hitwmapmakerplugin.main.core.Map
 import com.hitc.hitwmapmakerplugin.main.core.WallBlockType
 import com.hitc.hitwmapmakerplugin.main.utils.MapFileUtils
+import com.hitc.hitwmapmakerplugin.main.utils.MiscUtils
 import com.hitc.hitwmapmakerplugin.main.utils.blockPosition
 import com.sk89q.worldedit.BlockVector
 import org.bukkit.DyeColor
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.TreeSpecies
+import org.bukkit.block.BlockFace
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.material.*
+import kotlin.experimental.and
 
 class Scan : CommandExecutor {
 
@@ -51,20 +54,15 @@ class Scan : CommandExecutor {
         location.subtract(p.blockPosition)
 
         when (block.type) {
-            Material.WOOL,Material.STAINED_CLAY -> {
+            Material.WOOL -> {
                 var color : DyeColor? = null
                 (blockData as? Colorable)?.color?.let{ color = it }
 
                 when (color) {
-                    DyeColor.GREEN -> {
-                        if (block.type == Material.WOOL) wall.blocks[location] = WallBlockType.WALL
-                    }
-                    DyeColor.YELLOW -> if (block.type == Material.WOOL) wall.blocks[location] = WallBlockType.WALL2
-                    DyeColor.RED -> if (block.type == Material.WOOL) wall.blocks[location] = WallBlockType.WALL_UNUSED
-                    DyeColor.BLACK -> {
-                        if (block.type == Material.WOOL) wall.blocks[location] = WallBlockType.SUPPORT_START
-                        if (block.type == Material.STAINED_CLAY) wall.blocks[location] = WallBlockType.SUPPORT_END
-                    }
+                    DyeColor.GREEN  -> wall.blocks[location] = WallBlockType.WALL
+                    DyeColor.YELLOW -> wall.blocks[location] = WallBlockType.WALL2
+                    DyeColor.RED    -> wall.blocks[location] = WallBlockType.WALL_UNUSED
+                    DyeColor.BLACK  -> wall.blocks[location] = WallBlockType.SUPPORT_START
                     else -> return
                 }
             }
@@ -84,7 +82,7 @@ class Scan : CommandExecutor {
             }
             Material.LEVER -> {
                 wall.blocks[location] = WallBlockType.LEVER
-                wall.facings[location] = (blockData as? Lever)?.facing ?: return
+                wall.facings[location] = MiscUtils.getLeverFacing(blockData.data)
             }
             Material.COBBLE_WALL -> {
                 wall.blocks[location] = WallBlockType.SUPPORT
@@ -94,6 +92,11 @@ class Scan : CommandExecutor {
             }
             Material.STAINED_GLASS -> {
                 wall.blocks[location] = WallBlockType.GLASS
+            }
+            Material.STAINED_CLAY -> {
+                if (block.data == DyeColor.BLACK.data) {
+                    wall.blocks[location] = WallBlockType.SUPPORT_END
+                }
             }
 
             else -> return
